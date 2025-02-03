@@ -11,6 +11,7 @@ app.get('/',(req,res)=>{
 const start = ()=>{
     try{
         app.listen(PORT,()=>console.log(`Server starts on PORT=${PORT}`))
+        console.log("Абдималиков Байэл Эрнистович 11ИС-322")
     }
     catch(error){
         console.error('Unable to listen the port',error)
