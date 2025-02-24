@@ -3,8 +3,9 @@ const express = require("express")
 const app = express()
 
 const cors = require("cors")
-require("dotenv").config({path:'./db/.env'})
 app.use(cors())
+
+require("dotenv").config({path:'./db/.env'})
 
 const sequelize = require("./db/db_connect.js")
 const models = require("./db/models.js")
@@ -19,6 +20,7 @@ app.get('/',(req,res)=>{
 })
 const start = async()=>{
     try{
+        console.log("HOST = ",process.env.DB_HOST)
         await sequelize.authenticate()
         await sequelize.sync()
         console.log('Connection to the database established successfully')

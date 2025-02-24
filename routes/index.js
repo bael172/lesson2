@@ -1,7 +1,7 @@
 const Router = require("express")
 const router = new Router()
 
-const user = require('../query/user.js')
+const user = require('../queries/user.js')
 
 router.post('/user/add',user.add)
 
