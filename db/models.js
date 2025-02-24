@@ -1,9 +1,9 @@
 const sequelize = require("./db_connect")
-const {DataTypes} = require("sequelize")
+const {DataTypes,Op} = require("sequelize")
 
 const User = sequelize.define('user',{
     id:{type:DataTypes.INTEGER, primaryKey:true, autoIncrement:true},
-    surname:{type:DataTypes.STRING}, allowNull:false,
+    surname:{type:DataTypes.STRING, allowNull:false},
     name:{type:DataTypes.STRING,allowNull:false},
     lastname:{type:DataTypes.STRING},
 
@@ -18,7 +18,7 @@ const User = sequelize.define('user',{
 
     registr_at:{type:DataTypes.STRING},
     lives_now:{type:DataTypes.STRING},
-
+    
     tg:{type:DataTypes.STRING},
     vk:{type:DataTypes.STRING},
 })
