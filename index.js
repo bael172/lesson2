@@ -13,6 +13,7 @@ const router = require("./routes/index.js")
 
 PORT=8080
 
+app.use(express.json())
 app.use('/query',router)
 
 app.get('/',(req,res)=>{
