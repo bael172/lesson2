@@ -19,19 +19,44 @@ class Person {
         if(!surname && !name){
             res.send("Введите имя и фамилию")
         }
-        const candidate = await User.findOne({where:{
-            [Op.or]:[{[Op.and]:[{passport_serial},{passport_number}]},
-                    {[Op.and]:[{surname},{name},{phone},]},
-                    {tg},
-                    {vk}]
-        }})
+        try{
+            const candidate = await User.findOne({where:{
+                [Op.or]:[{[Op.and]:[{passport_serial},{passport_number}]},
+                        {[Op.and]:[{surname},{name},{phone},]},
+                        {tg},
+                        {vk}]
+            }})
+        }
+        catch(e){
+            return next(ApiError.internal('Ошибка поиска кандидата',e))
+        }
+
         if(!candidate){
-            const new_user = await User.create({passport_serial,passport_number, birthday, birthplace, surname, name, lastname, phone, email, tg, vk, registr_at, lives_now})
-            const token = generate_token(new_user.passport_serial,new_user.passport_number, new_user.birthday, new_user.birthday_place, 
-                                         new_user.surname, new_user.name, lastname, phone, email, tg, vk, registr_at, lives_now)
-            return res.status(200).json({token})
+            try{
+                const new_user = await User.create({passport_serial,passport_number, birthday, birthplace, surname, name, lastname, phone, email, tg, vk, registr_at, lives_now})
+                const token = generate_token(new_user.passport_serial,new_user.passport_number, new_user.birthday, new_user.birthday_place, 
+                                             new_user.surname, new_user.name, lastname, phone, email, tg, vk, registr_at, lives_now)
+                return res.status(200).json({token})
+            }
+            catch(e){
+                return next(ApiError.internal('Ошибка создания пользователя'))
+            }
+
         }
         else return next(ApiError.badRequest("Пользователь с такими данными уже в системе"))
+    }
+    async destroy(req,res,next){
+        const id = req.params.id;
+        try{
+            const candidate = await User.findByPk(id);
+            if(candidate){
+                await User.destroy({where:{id}}).then(response=>res.json(response))
+            }
+            else  return next(ApiError.badRequest('Пользователь с id=',id,' не существует'))
+        }
+        catch(e){
+            return next(ApiError.internal(e,'Ошибка удаления пользователя'))
+        }
     }
 }
 
